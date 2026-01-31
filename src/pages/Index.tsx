@@ -1,13 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { ViewType } from '@/types/esms';
+import { AppShell } from '@/components/layout/AppShell';
+import { DataLogView } from '@/components/views/DataLogView';
+import { EntryFormView } from '@/components/views/EntryFormView';
+import { DashboardView } from '@/components/views/DashboardView';
 
 const Index = () => {
+  const [currentView, setCurrentView] = useState<ViewType>('data-log');
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'data-log':
+        return <DataLogView />;
+      case 'entry-form':
+        return <EntryFormView />;
+      case 'dashboard':
+        return <DashboardView />;
+      default:
+        return <DataLogView />;
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <AppShell currentView={currentView} onViewChange={setCurrentView}>
+      {renderView()}
+    </AppShell>
   );
 };
 
