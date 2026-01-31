@@ -1,4 +1,4 @@
-import { OperationalDataEntry, User, DashboardMetrics } from '@/types/esms';
+import { OperationalDataEntry, User, DashboardMetrics, BulkIndicator, ActivityItem } from '@/types/esms';
 
 export const mockUser: User = {
   id: 'user-001',
@@ -147,3 +147,26 @@ export const units: Record<string, string> = {
   'Energy Consumption': 'MWh',
   'Oil Spill Volume': 'liters',
 };
+
+// Bulk Data Entry Mock Data
+export const mockBulkIndicators: BulkIndicator[] = [
+  { id: 'ind-001', name: 'Diesel', icon: 'Fuel', period: 'Dec 2025', value: null, unit: 'L', status: 'draft', hasEvidence: false },
+  { id: 'ind-002', name: 'Petrol', icon: 'Fuel', period: 'Dec 2025', value: 1250, unit: 'L', status: 'draft', hasEvidence: true },
+  { id: 'ind-003', name: 'Electricity', icon: 'Zap', period: 'Dec 2025', value: 4500, unit: 'MWh', status: 'approved', hasEvidence: true },
+  { id: 'ind-004', name: 'Natural Gas', icon: 'Flame', period: 'Dec 2025', value: null, unit: 'MCF', status: 'not_started', hasEvidence: false },
+  { id: 'ind-005', name: 'Water Consumption', icon: 'Droplets', period: 'Dec 2025', value: 890, unit: 'm³', status: 'pending_superintendent', hasEvidence: true },
+  { id: 'ind-006', name: 'Waste (Hazardous)', icon: 'Trash2', period: 'Dec 2025', value: 2.5, unit: 'TONS', status: 'draft', hasEvidence: false },
+  { id: 'ind-007', name: 'Waste (Non-Hazardous)', icon: 'Trash', period: 'Dec 2025', value: null, unit: 'TONS', status: 'not_started', hasEvidence: false },
+  { id: 'ind-008', name: 'CO2 Emissions', icon: 'Cloud', period: 'Dec 2025', value: 156.8, unit: 'TONS', status: 'superintendent_approved', hasEvidence: true },
+  { id: 'ind-009', name: 'Methane Emissions', icon: 'Wind', period: 'Dec 2025', value: null, unit: 'TONS', status: 'not_started', hasEvidence: false },
+  { id: 'ind-010', name: 'Flare Gas', icon: 'Flame', period: 'Dec 2025', value: 89.2, unit: 'MCF', status: 'rejected', hasEvidence: true },
+];
+
+// Activity Feed Mock Data
+export const mockActivityItems: ActivityItem[] = [
+  { id: 'act-001', action: 'Submitted', user: 'Sarah Chen', target: 'CO2 Emissions Report', timestamp: '2 min ago', status: 'pending' },
+  { id: 'act-002', action: 'Approved', user: 'John Mitchell', target: 'Energy Consumption Q4', timestamp: '15 min ago', status: 'success' },
+  { id: 'act-003', action: 'Rejected', user: 'Lisa Park', target: 'Waste Report - Nov', timestamp: '1 hour ago', status: 'error' },
+  { id: 'act-004', action: 'Created', user: 'Mike Rodriguez', target: 'Water Discharge Log', timestamp: '2 hours ago', status: 'success' },
+  { id: 'act-005', action: 'Updated', user: 'David Kim', target: 'Methane Leakage Data', timestamp: '3 hours ago', status: 'success' },
+];

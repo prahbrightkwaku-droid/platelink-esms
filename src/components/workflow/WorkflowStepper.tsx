@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { WorkflowStatus } from '@/types/esms';
-import { Check, Clock, FileEdit, UserCheck, ShieldCheck, X } from 'lucide-react';
+import { Check, Clock, FileEdit, UserCheck, ShieldCheck, X, Circle, Ban } from 'lucide-react';
 
 interface WorkflowStepperProps {
   status: WorkflowStatus;
@@ -20,11 +20,15 @@ const statusIndex: Record<WorkflowStatus, number> = {
   superintendent_approved: 2,
   approved: 3,
   rejected: -1,
+  not_started: -2,
+  cancelled: -3,
 };
 
 export function WorkflowStepper({ status, compact = false }: WorkflowStepperProps) {
   const currentIndex = statusIndex[status];
   const isRejected = status === 'rejected';
+  const isNotStarted = status === 'not_started';
+  const isCancelled = status === 'cancelled';
 
   if (isRejected) {
     return (
@@ -34,6 +38,30 @@ export function WorkflowStepper({ status, compact = false }: WorkflowStepperProp
       )}>
         <X className="h-4 w-4" />
         <span className="text-sm font-medium">Rejected</span>
+      </div>
+    );
+  }
+
+  if (isNotStarted) {
+    return (
+      <div className={cn(
+        'flex items-center gap-2 rounded-full px-3 py-1.5',
+        'bg-muted text-muted-foreground'
+      )}>
+        <Circle className="h-4 w-4" />
+        <span className="text-sm font-medium">Not Started</span>
+      </div>
+    );
+  }
+
+  if (isCancelled) {
+    return (
+      <div className={cn(
+        'flex items-center gap-2 rounded-full px-3 py-1.5',
+        'bg-muted text-muted-foreground'
+      )}>
+        <Ban className="h-4 w-4" />
+        <span className="text-sm font-medium">Cancelled</span>
       </div>
     );
   }

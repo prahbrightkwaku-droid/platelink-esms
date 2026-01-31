@@ -1,5 +1,5 @@
 import { User, ViewType } from '@/types/esms';
-import { Bell, Menu, Search, User as UserIcon } from 'lucide-react';
+import { Bell, Menu, Search, User as UserIcon, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface HeaderProps {
   user: User;
@@ -19,9 +20,9 @@ interface HeaderProps {
 }
 
 const viewTitles: Record<ViewType, string> = {
-  'data-log': 'Operational Data Log',
-  'entry-form': 'New Data Entry',
-  'dashboard': 'Executive Dashboard',
+  'dashboard': 'Dashboard',
+  'data-entry': 'Data Entry',
+  'approvals': 'Approvals',
 };
 
 const roleLabels: Record<string, string> = {
@@ -31,8 +32,10 @@ const roleLabels: Record<string, string> = {
 };
 
 export function Header({ user, currentView, onMenuToggle }: HeaderProps) {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <header className="flex h-16 items-center justify-between gap-4 border-b border-border bg-card px-4 md:px-6">
+    <header className="flex h-16 items-center justify-between gap-4 border-b border-border bg-card px-4 md:px-6 shadow-sm">
       {/* Left section */}
       <div className="flex items-center gap-4">
         <Button
@@ -59,15 +62,29 @@ export function Header({ user, currentView, onMenuToggle }: HeaderProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search entries, sites..."
-            className="pl-9 bg-secondary border-border"
+            className="pl-9 bg-secondary/50 border-border"
           />
         </div>
       </div>
 
       {/* Right section */}
       <div className="flex items-center gap-2">
+        {/* Theme Toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          {theme === 'light' ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
+        </Button>
+
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
           <Bell className="h-5 w-5" />
           <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
             3

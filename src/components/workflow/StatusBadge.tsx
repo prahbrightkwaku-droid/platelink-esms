@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { WorkflowStatus } from '@/types/esms';
-import { Check, Clock, FileEdit, ShieldCheck, X } from 'lucide-react';
+import { Check, Clock, FileEdit, ShieldCheck, X, Circle, Ban } from 'lucide-react';
 
 interface StatusBadgeProps {
   status: WorkflowStatus;
@@ -15,12 +15,12 @@ const statusConfig: Record<WorkflowStatus, {
   draft: {
     label: 'Draft',
     icon: FileEdit,
-    className: 'bg-muted text-muted-foreground',
+    className: 'bg-warning/20 text-warning border-warning/30',
   },
   pending_superintendent: {
     label: 'Pending Review',
     icon: Clock,
-    className: 'bg-warning/20 text-warning border-warning/30',
+    className: 'bg-primary/20 text-primary border-primary/30',
   },
   superintendent_approved: {
     label: 'Supt. Approved',
@@ -36,6 +36,16 @@ const statusConfig: Record<WorkflowStatus, {
     label: 'Rejected',
     icon: X,
     className: 'bg-destructive/20 text-destructive border-destructive/30',
+  },
+  not_started: {
+    label: 'Not Started',
+    icon: Circle,
+    className: 'bg-muted text-muted-foreground border-muted-foreground/30',
+  },
+  cancelled: {
+    label: 'Cancelled',
+    icon: Ban,
+    className: 'bg-muted text-muted-foreground border-muted-foreground/30',
   },
 };
 
