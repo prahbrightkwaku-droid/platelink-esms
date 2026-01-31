@@ -1,6 +1,6 @@
 // ESMS Platelink Type Definitions
 
-export type WorkflowStatus = 'draft' | 'pending_superintendent' | 'superintendent_approved' | 'approved' | 'rejected';
+export type WorkflowStatus = 'draft' | 'pending_superintendent' | 'superintendent_approved' | 'approved' | 'rejected' | 'not_started' | 'cancelled';
 
 export type UserRole = 'operations_engineer' | 'operations_superintendent' | 'esg_superintendent';
 
@@ -34,10 +34,31 @@ export interface DashboardMetrics {
   rejectedThisMonth: number;
 }
 
-export type ViewType = 'data-log' | 'entry-form' | 'dashboard';
+export type ViewType = 'dashboard' | 'data-entry' | 'approvals';
 
 export interface NavigationItem {
   id: ViewType;
   label: string;
   icon: string;
+}
+
+// Bulk Data Entry Types
+export interface BulkIndicator {
+  id: string;
+  name: string;
+  icon: string;
+  period: string;
+  value: number | null;
+  unit: string;
+  status: WorkflowStatus;
+  hasEvidence: boolean;
+}
+
+export interface ActivityItem {
+  id: string;
+  action: string;
+  user: string;
+  target: string;
+  timestamp: string;
+  status: 'success' | 'pending' | 'error';
 }

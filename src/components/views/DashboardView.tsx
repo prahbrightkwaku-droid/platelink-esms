@@ -1,285 +1,236 @@
-import { mockDashboardMetrics, mockOperationalData } from '@/data/mockData';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { WorkflowStepper } from '@/components/workflow/WorkflowStepper';
-import {
-  Clock,
-  AlertTriangle,
-  TrendingUp,
-  FileCheck,
-  CheckCircle,
-  XCircle,
+import { mockDashboardMetrics, mockActivityItems } from '@/data/mockData';
+import { 
+  Clock, 
+  AlertTriangle, 
+  CheckCircle2, 
+  FileText, 
+  TrendingUp, 
+  TrendingDown,
+  Zap,
+  Droplets,
+  Flame
 } from 'lucide-react';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
 } from 'recharts';
 
-const metrics = mockDashboardMetrics;
-
-// Sample chart data
-const trendData = [
-  { month: 'Aug', value: 32 },
-  { month: 'Sep', value: 45 },
-  { month: 'Oct', value: 38 },
-  { month: 'Nov', value: 52 },
-  { month: 'Dec', value: 48 },
-  { month: 'Jan', value: 56 },
+const chartData = [
+  { month: 'Jul', value: 120 },
+  { month: 'Aug', value: 145 },
+  { month: 'Sep', value: 138 },
+  { month: 'Oct', value: 165 },
+  { month: 'Nov', value: 152 },
+  { month: 'Dec', value: 178 },
+  { month: 'Jan', value: 156 },
 ];
 
-const statusDistribution = [
-  { name: 'Approved', value: 45, color: 'hsl(142, 76%, 36%)' },
-  { name: 'Pending', value: 12, color: 'hsl(38, 92%, 50%)' },
-  { name: 'Draft', value: 8, color: 'hsl(215, 35%, 20%)' },
-  { name: 'Rejected', value: 4, color: 'hsl(0, 72%, 51%)' },
+const kpiCards = [
+  {
+    title: 'Total Energy',
+    value: '4,520',
+    unit: 'MWh',
+    change: '+12.5%',
+    trend: 'up',
+    icon: Zap,
+    color: 'text-primary',
+    bgColor: 'bg-primary/10',
+  },
+  {
+    title: 'Water Usage',
+    value: '1,250',
+    unit: 'm³',
+    change: '-8.2%',
+    trend: 'down',
+    icon: Droplets,
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-500/10',
+  },
+  {
+    title: 'CO2 Emissions',
+    value: '245.8',
+    unit: 'tonnes',
+    change: '+3.1%',
+    trend: 'up',
+    icon: Flame,
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-500/10',
+  },
+  {
+    title: 'Pending Approvals',
+    value: mockDashboardMetrics.pendingApprovals.toString(),
+    unit: 'items',
+    change: '',
+    trend: 'neutral',
+    icon: Clock,
+    color: 'text-warning',
+    bgColor: 'bg-warning/10',
+  },
 ];
 
 export function DashboardView() {
-  const recentPending = mockOperationalData.filter(
-    (e) => e.status === 'pending_superintendent' || e.status === 'superintendent_approved'
-  ).slice(0, 3);
-
   return (
     <div className="space-y-6">
-      {/* Metrics Grid */}
+      {/* KPI Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          title="Pending Approvals"
-          value={metrics.pendingApprovals}
-          icon={Clock}
-          trend="+2 from yesterday"
-          accentColor="text-warning"
-        />
-        <MetricCard
-          title="Total Incidents"
-          value={metrics.totalIncidents}
-          icon={AlertTriangle}
-          trend="This month"
-          accentColor="text-destructive"
-        />
-        <MetricCard
-          title="Compliance Rate"
-          value={`${metrics.complianceRate}%`}
-          icon={TrendingUp}
-          trend="+1.2% from last month"
-          accentColor="text-success"
-        />
-        <MetricCard
-          title="Total Entries"
-          value={metrics.totalEntries}
-          icon={FileCheck}
-          trend="All time"
-          accentColor="text-primary"
-        />
-      </div>
-
-      {/* Charts Row */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Trend Chart */}
-        <Card className="border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg text-foreground">
-              Monthly Entry Trends
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={trendData}>
-                  <defs>
-                    <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(197, 100%, 47%)" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="hsl(197, 100%, 47%)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="hsl(215, 35%, 25%)"
-                    vertical={false}
-                  />
-                  <XAxis
-                    dataKey="month"
-                    stroke="hsl(215, 20%, 55%)"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    stroke="hsl(215, 20%, 55%)"
-                    fontSize={12}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'hsl(215, 55%, 16%)',
-                      border: '1px solid hsl(215, 35%, 25%)',
-                      borderRadius: '8px',
-                      color: 'hsl(210, 40%, 98%)',
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke="hsl(197, 100%, 47%)"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorValue)"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Status Distribution */}
-        <Card className="border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg text-foreground">
-              Status Distribution
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={statusDistribution}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={4}
-                    dataKey="value"
-                  >
-                    {statusDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: 'hsl(215, 55%, 16%)',
-                      border: '1px solid hsl(215, 35%, 25%)',
-                      borderRadius: '8px',
-                      color: 'hsl(210, 40%, 98%)',
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 mt-4">
-              {statusDistribution.map((item) => (
-                <div key={item.name} className="flex items-center gap-2">
-                  <div
-                    className="h-3 w-3 rounded-full"
-                    style={{ backgroundColor: item.color }}
-                  />
-                  <span className="text-sm text-muted-foreground">{item.name}</span>
+        {kpiCards.map((card) => {
+          const Icon = card.icon;
+          return (
+            <div key={card.title} className="kpi-card">
+              <div className="flex items-center justify-between">
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.bgColor}`}>
+                  <Icon className={`h-5 w-5 ${card.color}`} />
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Approval Stats and Recent Pending */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* This Month Stats */}
-        <Card className="border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg text-foreground">
-              This Month's Activity
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-lg bg-success/10 border border-success/20">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="h-5 w-5 text-success" />
-                <span className="font-medium text-foreground">Approved</span>
-              </div>
-              <span className="text-2xl font-bold text-success">
-                {metrics.approvedThisMonth}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-4 rounded-lg bg-destructive/10 border border-destructive/20">
-              <div className="flex items-center gap-3">
-                <XCircle className="h-5 w-5 text-destructive" />
-                <span className="font-medium text-foreground">Rejected</span>
-              </div>
-              <span className="text-2xl font-bold text-destructive">
-                {metrics.rejectedThisMonth}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Recent Pending Items */}
-        <Card className="border-border bg-card">
-          <CardHeader>
-            <CardTitle className="text-lg text-foreground">
-              Pending Your Review
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {recentPending.length === 0 ? (
-              <p className="text-muted-foreground text-center py-4">
-                No items pending review
-              </p>
-            ) : (
-              recentPending.map((entry) => (
-                <div
-                  key={entry.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-secondary border border-border"
-                >
-                  <div>
-                    <p className="font-medium text-foreground text-sm">
-                      {entry.indicator}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {entry.siteName}
-                    </p>
+                {card.change && (
+                  <div className={`flex items-center gap-1 text-xs font-medium ${
+                    card.trend === 'up' ? 'text-success' : card.trend === 'down' ? 'text-destructive' : 'text-muted-foreground'
+                  }`}>
+                    {card.trend === 'up' ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {card.change}
                   </div>
-                  <WorkflowStepper status={entry.status} compact />
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
+                )}
+              </div>
+              <div className="mt-3">
+                <p className="text-sm text-muted-foreground">{card.title}</p>
+                <p className="text-2xl font-semibold text-foreground mt-1">
+                  {card.value}
+                  <span className="text-sm font-normal text-muted-foreground ml-1">{card.unit}</span>
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    </div>
-  );
-}
 
-interface MetricCardProps {
-  title: string;
-  value: string | number;
-  icon: typeof Clock;
-  trend: string;
-  accentColor: string;
-}
-
-function MetricCard({ title, value, icon: Icon, trend, accentColor }: MetricCardProps) {
-  return (
-    <Card className="border-border bg-card">
-      <CardContent className="pt-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">{title}</p>
-            <p className={`text-3xl font-bold mt-1 ${accentColor}`}>{value}</p>
-            <p className="text-xs text-muted-foreground mt-1">{trend}</p>
+      {/* Metrics Overview */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        {/* Compliance Card */}
+        <div className="kpi-card col-span-1">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10">
+              <CheckCircle2 className="h-5 w-5 text-success" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Compliance Rate</p>
+              <p className="text-2xl font-semibold text-foreground">{mockDashboardMetrics.complianceRate}%</p>
+            </div>
           </div>
-          <div className={`p-3 rounded-lg bg-secondary ${accentColor}`}>
-            <Icon className="h-5 w-5" />
+          <div className="mt-4 h-2 rounded-full bg-muted overflow-hidden">
+            <div 
+              className="h-full bg-success rounded-full transition-all"
+              style={{ width: `${mockDashboardMetrics.complianceRate}%` }}
+            />
           </div>
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Total Entries */}
+        <div className="kpi-card col-span-1">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Total Entries</p>
+              <p className="text-2xl font-semibold text-foreground">{mockDashboardMetrics.totalEntries}</p>
+            </div>
+          </div>
+          <div className="mt-4 flex gap-4 text-sm">
+            <span className="text-success">{mockDashboardMetrics.approvedThisMonth} approved</span>
+            <span className="text-destructive">{mockDashboardMetrics.rejectedThisMonth} rejected</span>
+          </div>
+        </div>
+
+        {/* Incidents */}
+        <div className="kpi-card col-span-1">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-destructive/10">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Total Incidents</p>
+              <p className="text-2xl font-semibold text-foreground">{mockDashboardMetrics.totalIncidents}</p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">This month</p>
+        </div>
+      </div>
+
+      {/* Chart and Activity */}
+      <div className="grid gap-4 lg:grid-cols-5">
+        {/* Trend Chart */}
+        <div className="kpi-card lg:col-span-3">
+          <h3 className="text-sm font-medium text-foreground mb-4">Monthly Submissions</h3>
+          <div className="h-[200px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={chartData}>
+                <defs>
+                  <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(197, 100%, 47%)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="hsl(197, 100%, 47%)" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="hsl(var(--muted-foreground))" 
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis 
+                  stroke="hsl(var(--muted-foreground))" 
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '8px',
+                    color: 'hsl(var(--foreground))'
+                  }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="value" 
+                  stroke="hsl(197, 100%, 47%)" 
+                  strokeWidth={2}
+                  fill="url(#colorValue)" 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="kpi-card lg:col-span-2">
+          <h3 className="text-sm font-medium text-foreground mb-4">Recent Activity</h3>
+          <div className="space-y-4">
+            {mockActivityItems.map((item) => (
+              <div key={item.id} className="flex items-start gap-3">
+                <div className={`mt-1 h-2 w-2 rounded-full ${
+                  item.status === 'success' ? 'bg-success' : 
+                  item.status === 'pending' ? 'bg-warning' : 'bg-destructive'
+                }`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-foreground truncate">
+                    <span className="font-medium">{item.user}</span>
+                    {' '}{item.action.toLowerCase()}{' '}
+                    <span className="text-muted-foreground">{item.target}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">{item.timestamp}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

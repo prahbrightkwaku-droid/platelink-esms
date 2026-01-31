@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils';
 import { ViewType } from '@/types/esms';
 import { 
-  Database, 
-  FileEdit, 
   LayoutDashboard, 
   ChevronLeft,
   ChevronRight,
-  Leaf
+  Leaf,
+  FileSpreadsheet,
+  CheckSquare
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -17,10 +17,10 @@ interface SidebarProps {
   onToggleCollapse: () => void;
 }
 
-const navItems: { id: ViewType; label: string; icon: typeof Database }[] = [
-  { id: 'data-log', label: 'Data Log', icon: Database },
-  { id: 'entry-form', label: 'New Entry', icon: FileEdit },
+const navItems: { id: ViewType; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'data-entry', label: 'Data Entry', icon: FileSpreadsheet },
+  { id: 'approvals', label: 'Approvals', icon: CheckSquare },
 ];
 
 export function Sidebar({ currentView, onViewChange, collapsed, onToggleCollapse }: SidebarProps) {
@@ -86,7 +86,7 @@ export function Sidebar({ currentView, onViewChange, collapsed, onToggleCollapse
       {!collapsed && (
         <div className="border-t border-sidebar-border p-4">
           <div className="rounded-lg bg-sidebar-accent p-3">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-sidebar-foreground/70">
               Environmental & Social Management System
             </p>
             <p className="text-xs text-primary mt-1">v2.4.1</p>
