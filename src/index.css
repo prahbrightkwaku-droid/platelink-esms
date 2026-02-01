@@ -11,8 +11,8 @@
 
 @layer base {
   :root {
-    /* Light Theme - Clean white/grey base */
-    --background: 220 20% 97%;
+    /* Light Theme - Clean white base */
+    --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
     /* Cards - Pure white with subtle depth */
